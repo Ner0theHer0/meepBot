@@ -37,5 +37,11 @@ async def coin_flip(ctx):
     response = random.choice(result)
     await ctx.send(response)
 
+@bot.command(name='role', help='adds role if it exits. Use: !role Dota')
+async def dota_time(ctx, arg):
+    print ('this is supposed to give you role ' + arg)
+
+    
+
 bot.run(token)
 bot.users
