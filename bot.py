@@ -36,7 +36,7 @@ async def dota_time(ctx):
     sRoles = bot.get_guild(server).roles
     
     for x in range(len(sRoles)):
-        if sRoles[x].name == "Dota":
+        if sRoles[x].name.lower() == "dota":
             response = (sRoles[x].mention + "\n" +
             sRoles[x].mention + "\n" +
             "ITS TIME FOR DOTA NERDS\n" +
@@ -56,12 +56,18 @@ async def coin_flip(ctx):
     response = random.choice(result)
     await ctx.send(response)
 
+@bot.command(name='git', help='Links to github repo')
+async def git_post(ctx):
+    response = 'Find the source code for this bot here: https://github.com/Ner0theHer0/meepBot'
+    await ctx.send(response)
+
 @bot.command(name='role', help='adds role if it exits. Use: !role Dota', commands_heading='Roles')
 async def dota_time(ctx, *arg):
 
     whitelist = (
         'test',
-        'one two'
+        'one two',
+        'dota'
     )
     
     server = ctx.guild.id
@@ -70,7 +76,7 @@ async def dota_time(ctx, *arg):
     if (arg):
         argStr = ' '.join(arg)
         for x in range(len(sRoles)):
-            if sRoles[x].name == argStr:
+            if sRoles[x].name == argStr.lower():
                 if sRoles[x].name in whitelist:
                     user = ctx.author
                     if (sRoles[x] not in user.roles):
