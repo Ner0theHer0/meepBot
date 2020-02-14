@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='!', description="I bring the FUN in disfunction!")
 
 @bot.command(name='kalpa', help='insults Kalpa')
 async def fuck_kalpa(ctx):
@@ -18,18 +18,36 @@ async def fuck_kalpa(ctx):
         '<@!217583229165633536> = inferior engineer',
     ]
 
-    response = random.choice(hate)
-    await ctx.send(response)
+    kalpa = 217583229165633536
+    
+    if (ctx.guild.get_member(kalpa)):
+        response = random.choice(hate)
+        await ctx.send(response)
+    else:
+        await ctx.send("Kalpa isn't here to hate on!")
 
-@bot.command(name='dota', help='pings @Dota')
+def setup(bot):
+    bot.add_cog(Members(bot))
+
+@bot.command(name='dota', help='pings @Dota', commands_heading='General')
 async def dota_time(ctx):
-    response = ("<@&677373582082310154>\n"
-    "ITS TIME FOR DOTA NERDS\n"
-    "<@&677373582082310154>\n"
-    "<@&677373582082310154>")
+
+    server = ctx.guild.id
+    sRoles = bot.get_guild(server).roles
+    
+    for x in range(len(sRoles)):
+        if sRoles[x].name == "Dota":
+            response = (sRoles[x].mention + "\n" +
+            sRoles[x].mention + "\n" +
+            "ITS TIME FOR DOTA NERDS\n" +
+            sRoles[x].mention + "\n" +
+            sRoles[x].mention)
+            await ctx.send(response)
+            return
+    response = ("There isn't a dota role on this server :sob:")
     await ctx.send(response)
 
-@bot.command(name='flip', help='flips a coin')
+@bot.command(name='flip', help='flips a coin', commands_heading='General')
 async def coin_flip(ctx):
     result = [
         'Heads',
@@ -38,7 +56,7 @@ async def coin_flip(ctx):
     response = random.choice(result)
     await ctx.send(response)
 
-@bot.command(name='role', help='adds role if it exits. Use: !role Dota')
+@bot.command(name='role', help='adds role if it exits. Use: !role Dota', commands_heading='Roles')
 async def dota_time(ctx, *arg):
 
     whitelist = (
@@ -51,24 +69,27 @@ async def dota_time(ctx, *arg):
     
     if (arg):
         argStr = ' '.join(arg)
-        tst = 0
         for x in range(len(sRoles)):
             if sRoles[x].name == argStr:
-                tst = 1
                 if sRoles[x].name in whitelist:
                     user = ctx.author
                     if (sRoles[x] not in user.roles):
                         await user.add_roles(sRoles[x])
                         response = (user.mention + ' is now a member of ' + sRoles[x].name)
                         await ctx.send(response)
+                        return
                     else:
                         await user.remove_roles(sRoles[x])
                         response = (user.mention + ' is no longer a member of ' + sRoles[x].name)
                         await ctx.send(response)
+                        return
+                    
                 else:
                     await ctx.send("This role is not whitelisted")
-        if (x+1 >= len(sRoles) and tst == 0):
-            await ctx.send("This role does not exist")
+                    return
+                
+        await ctx.send("This role does not exist")
+        
     else:
         roleStr = " \n".join(whitelist)
         await ctx.send(ctx.author.mention + ", use !role (role) to assign yourself a role.\n"
