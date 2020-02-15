@@ -2,6 +2,7 @@
 import os
 import random
 import sys
+import csv
 
 from discord.ext import commands
 from discord.utils import get
@@ -76,12 +77,15 @@ async def git_post(ctx):
 @bot.command(name='role', help='adds role if it exits. Use: !role Dota', commands_heading='Roles')
 async def dota_time(ctx, *arg):
 
-    whitelist = (
-        'test',
-        'one two',
-        'dota'
-    )
-    
+    with open('whitelist.csv') as wl:
+        read = csv.reader(wl)
+
+        whitelist = []
+        col = 0
+        for row in read:
+            whitelist.append(row[0])
+            print ('seomting')
+
     server = ctx.guild.id
     sRoles = bot.get_guild(server).roles
     
