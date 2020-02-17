@@ -74,17 +74,48 @@ async def git_post(ctx):
     response = 'Find the source code for this bot here: https://github.com/Ner0theHer0/meepBot'
     await ctx.send(response)
 
+@bot.command(name='whitelist', help='whitelists a role')
+async def add_to_whitelist(ctx, *arg):
+    
+    if not ctx.author.guild_permissions.administrator:
+        await ctx.send("Only and administrator can perform this action")
+        
+    else:
+        argStr = ' '.join(arg)
+        argStr.lower()
+        
+        whitelist = []
+        whitelist = read_csv('whitelist.csv')
+
+        with open('whitelist.csv', 'w', newline='') as wl:
+
+            server = ctx.guild.id
+            sRoles = bot.get_guild(server).roles
+
+            for z in range(len(sRoles)):
+                if sRoles[z].name.lower() in argStr:
+                    
+                    write = csv.writer(wl,  delimiter=' ')
+                    
+                    if argStr in whitelist:
+                        whitelist.remove(argStr)
+                        await ctx.send("Removed role '" + argStr + "' from whitelist")
+
+                    else:
+                        write.writerow([argStr])
+                        await ctx.send("Whitelisted role '" + argStr + "'")
+
+                    for x in range(len(whitelist)):
+                        write.writerow([whitelist[x]])
+                    return
+            await ctx.send("Role '" + argStr + "' does not exist")
+
 @bot.command(name='role', help='adds role if it exits. Use: !role Dota', commands_heading='Roles')
 async def dota_time(ctx, *arg):
 
-    with open('whitelist.csv') as wl:
-        read = csv.reader(wl)
+    whitelist = []
 
-        whitelist = []
-        col = 0
-        for row in read:
-            whitelist.append(row[0])
-            print ('seomting')
+    whitelist = read_csv('whitelist.csv')
 
     server = ctx.guild.id
     sRoles = bot.get_guild(server).roles
@@ -117,6 +148,16 @@ async def dota_time(ctx, *arg):
         await ctx.send(ctx.author.mention + ", use !role (role) to assign yourself a role.\n"
                        "The following roles are self assignable:\n```"
                        + roleStr + "```")
+
+def read_csv(filename):
+        with open(filename) as wl:
+            read = csv.reader(wl)
+
+            wlist = []
+            col = 0
+            for row in read:
+                wlist.append(row[0])
+            return wlist
 
 bot.run(token)
 bot.users
