@@ -10,24 +10,19 @@ from discord.utils import get
 from dotenv import load_dotenv
 import discord
 
-import csv
 
+class Roles(commands.Cog):
 
-class role_toolsCog(commands.Cog):
-
-    #bot = commands.Bot(command_prefix='!', description="I bring the FUN in disfunction!")
 
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(name='role', help='adds role if it exits. Use: !role Dota', pass_context = True)
+    @commands.command(name='role', help='Assigns you an available role')
     async def role_command(self, ctx, *arg):
 
         whitelist = []
 
         whitelist = read_csv('whitelist.csv')
-
-        #server = ctx.guild.id
         sRoles = ctx.guild.roles
         
         if (arg):
@@ -59,7 +54,7 @@ class role_toolsCog(commands.Cog):
                            "The following roles are self assignable:\n```"
                            + roleStr + "```")
 
-    @commands.command(name='whitelist', help='whitelists a role')
+    @commands.command(name='whitelist', help='Whitelists a role')
     async def add_to_whitelist(self, ctx, *arg):
         
         if not ctx.author.guild_permissions.administrator:
@@ -74,7 +69,6 @@ class role_toolsCog(commands.Cog):
 
             with open('whitelist.csv', 'w', newline='') as wl:
 
-                server = ctx.guild.id
                 sRoles = ctx.guild.roles
 
                 for z in range(len(sRoles)):
@@ -106,5 +100,5 @@ def read_csv(filename):
                 return wlist
             
 def setup(bot):
-    bot.add_cog(role_toolsCog(bot))
+    bot.add_cog(Roles(bot))
     

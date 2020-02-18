@@ -8,9 +8,9 @@ import sys
 import traceback
 
 initial_extensions = [
-    'cogs.role_tools'
-    #'cogs.members',
-    #'cogs.admin'
+    'cogs.role_tools',
+    'cogs.admin',
+    'cogs.members'
 ]
 
 bot = commands.Bot(command_prefix='!', description="I bring the FUN in disfunction!")
