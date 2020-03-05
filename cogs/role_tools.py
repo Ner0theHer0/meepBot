@@ -26,10 +26,11 @@ class Roles(commands.Cog):
         sRoles = ctx.guild.roles
         
         if (arg):
-            argStr = ' '.join(arg)
+            argS = ' '.join(arg)
+            argStr = argS.lower()
             for x in range(len(sRoles)):
-                if sRoles[x].name == argStr.lower():
-                    if sRoles[x].name in whitelist:
+                if sRoles[x].name.lower() == argStr:
+                    if sRoles[x].name.lower() in whitelist:
                         user = ctx.author
                         if (sRoles[x] not in user.roles):
                             await user.add_roles(sRoles[x])
@@ -48,11 +49,13 @@ class Roles(commands.Cog):
                     
             await ctx.send("This role does not exist")
             
-        else:
+        elif (whitelist):
             roleStr = " \n".join(whitelist)
             await ctx.send(ctx.author.mention + ", use !role (role) to assign yourself a role.\n"
                            "The following roles are self assignable:\n```"
                            + roleStr + "```")
+        else:
+            await ctx.send("There are currently no self-assignable roles")
 
     @commands.command(name='whitelist', help='Whitelists a role')
     async def add_to_whitelist(self, ctx, *arg):
@@ -60,10 +63,10 @@ class Roles(commands.Cog):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send("Only and administrator can perform this action")
             
-        else:
-            argStr = ' '.join(arg)
-            argStr.lower()
-            
+        elif (arg):
+            argS = ' '.join(arg)
+            argStr = argS.lower()
+
             whitelist = []
             whitelist = read_csv('whitelist.csv')
 
@@ -72,7 +75,7 @@ class Roles(commands.Cog):
                 sRoles = ctx.guild.roles
 
                 for z in range(len(sRoles)):
-                    if sRoles[z].name.lower() in argStr:
+                    if sRoles[z].name.lower() == argStr:
                         
                         write = csv.writer(wl,  delimiter=' ')
                         
@@ -88,6 +91,17 @@ class Roles(commands.Cog):
                             write.writerow([whitelist[x]])
                         return
                 await ctx.send("Role '" + argStr + "' does not exist")
+        else:
+            
+            whitelist = []
+            whitelist = read_csv('whitelist.csv')
+            
+            if (whitelist):
+                roleStr = " \n".join(whitelist)
+                await ctx.send(ctx.author.mention + ", the following roles are self assignable:\n```"
+                           + roleStr + "```")
+            else:
+                await ctx.send("There are currently no whitelisted roles")
     
 def read_csv(filename):
             with open(filename) as wl:

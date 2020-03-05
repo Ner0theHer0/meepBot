@@ -48,12 +48,12 @@ class Memebers(commands.Cog):
         await ctx.send(response)
 
     @commands.command(name='git', help='Links to github repo')
-    async def git_post(ctx):
+    async def git_post(self, ctx):
         response = 'Find the source code for this bot here: https://github.com/Ner0theHer0/meepBot'
         await ctx.send(response)
 
     @commands.command(name='flip', help='Flips a coin')
-    async def coin_flip(ctx):
+    async def coin_flip(self, ctx):
         result = [
             'Heads',
             'Tails',
