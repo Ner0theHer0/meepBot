@@ -1,163 +1,25 @@
-# bot.py
-import os
-import random
-import sys
-import csv
-
+import discord
 from discord.ext import commands
-from discord.utils import get
+
 from dotenv import load_dotenv
+import os
+
+import sys
+import traceback
+
+initial_extensions = [
+    'cogs.role_tools',
+    'cogs.admin',
+    'cogs.members'
+]
+
+bot = commands.Bot(command_prefix='!', description="I bring the FUN in disfunction!")
+
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        bot.load_extension(extension)
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='!', description="I bring the FUN in disfunction!")
-
-@bot.command(name='kalpa', help='insults Kalpa')
-async def fuck_kalpa(ctx):
-    hate = [
-        '<@!217583229165633536> shits in gutters',
-        '<@!217583229165633536> = inferior engineer',
-    ]
-
-    kalpa = 217583229165633536
-    
-    if (ctx.guild.get_member(kalpa)):
-        response = random.choice(hate)
-        await ctx.send(response)
-    else:
-        await ctx.send("Kalpa isn't here to hate on!")
-
-def setup(bot):
-    bot.add_cog(Members(bot))
-
-@bot.command(name='dota', help='pings @Dota', commands_heading='General')
-async def dota_time(ctx):
-
-    server = ctx.guild.id
-    sRoles = bot.get_guild(server).roles
-    
-    for x in range(len(sRoles)):
-        if sRoles[x].name.lower() == "dota":
-            response = (sRoles[x].mention + "\n" +
-            sRoles[x].mention + "\n" +
-            "ITS TIME FOR DOTA NERDS\n" +
-            sRoles[x].mention + "\n" +
-            sRoles[x].mention)
-            await ctx.send(response)
-            return
-    response = ("There isn't a dota role on this server :sob:")
-    await ctx.send(response)
-
-@bot.command(name='flip', help='flips a coin', commands_heading='General')
-async def coin_flip(ctx):
-    result = [
-        'Heads',
-        'Tails',
-    ]
-    response = random.choice(result)
-    await ctx.send(response)
-
-@bot.command(name='exit', help='Sends the bot offline')
-async def go_offline(ctx):
-    if (ctx.author.guild_permissions.administrator):
-        response = "Goodnight!"
-        await ctx.send(response)
-        sys.exit(0)
-    else:
-        response = "Only an admin can perform this action"
-        await ctx.send(response)
-        
-
-@bot.command(name='git', help='Links to github repo')
-async def git_post(ctx):
-    response = 'Find the source code for this bot here: https://github.com/Ner0theHer0/meepBot'
-    await ctx.send(response)
-
-@bot.command(name='whitelist', help='whitelists a role')
-async def add_to_whitelist(ctx, *arg):
-    
-    if not ctx.author.guild_permissions.administrator:
-        await ctx.send("Only and administrator can perform this action")
-        
-    else:
-        argStr = ' '.join(arg)
-        argStr.lower()
-        
-        whitelist = []
-        whitelist = read_csv('whitelist.csv')
-
-        with open('whitelist.csv', 'w', newline='') as wl:
-
-            server = ctx.guild.id
-            sRoles = bot.get_guild(server).roles
-
-            for z in range(len(sRoles)):
-                if sRoles[z].name.lower() in argStr:
-                    
-                    write = csv.writer(wl,  delimiter=' ')
-                    
-                    if argStr in whitelist:
-                        whitelist.remove(argStr)
-                        await ctx.send("Removed role '" + argStr + "' from whitelist")
-
-                    else:
-                        write.writerow([argStr])
-                        await ctx.send("Whitelisted role '" + argStr + "'")
-
-                    for x in range(len(whitelist)):
-                        write.writerow([whitelist[x]])
-                    return
-            await ctx.send("Role '" + argStr + "' does not exist")
-
-@bot.command(name='role', help='adds role if it exits. Use: !role Dota', commands_heading='Roles')
-async def dota_time(ctx, *arg):
-
-    whitelist = []
-
-    whitelist = read_csv('whitelist.csv')
-
-    server = ctx.guild.id
-    sRoles = bot.get_guild(server).roles
-    
-    if (arg):
-        argStr = ' '.join(arg)
-        for x in range(len(sRoles)):
-            if sRoles[x].name == argStr.lower():
-                if sRoles[x].name in whitelist:
-                    user = ctx.author
-                    if (sRoles[x] not in user.roles):
-                        await user.add_roles(sRoles[x])
-                        response = (user.mention + ' is now a member of ' + sRoles[x].name)
-                        await ctx.send(response)
-                        return
-                    else:
-                        await user.remove_roles(sRoles[x])
-                        response = (user.mention + ' is no longer a member of ' + sRoles[x].name)
-                        await ctx.send(response)
-                        return
-                    
-                else:
-                    await ctx.send("This role is not whitelisted")
-                    return
-                
-        await ctx.send("This role does not exist")
-        
-    else:
-        roleStr = " \n".join(whitelist)
-        await ctx.send(ctx.author.mention + ", use !role (role) to assign yourself a role.\n"
-                       "The following roles are self assignable:\n```"
-                       + roleStr + "```")
-
-def read_csv(filename):
-        with open(filename) as wl:
-            read = csv.reader(wl)
-
-            wlist = []
-            col = 0
-            for row in read:
-                wlist.append(row[0])
-            return wlist
-
 bot.run(token)
-bot.users
