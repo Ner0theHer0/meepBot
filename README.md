@@ -13,16 +13,16 @@ Currently, there are some issues with a microsoft certificate and hosting bots o
 ## Role Management
 
 ### Admin Tools
-	* !whitelist (role): Adds a role to whitelist if such a role exists in the server, and is not already in the whitelist. If the role is already in the whitelist, it removes it.
-	* !exit: Shuts the bot down (helpful if you are running this service from a hidden shell)
+* !whitelist (role): Adds a role to whitelist if such a role exists in the server, and is not already in the whitelist. If the role is already in the whitelist, it removes it.
+* !exit: Shuts the bot down (helpful if you are running this service from a hidden shell)
 	
 ### User Commands 
-	* !role: Lists the available self-assignable roles to the user
-	* !role (roleName): If the user does not have this role and it self-assignable, they are assigned the role. If they already have the role, it is removed from them.
-	* !whitelist: Lists the available self-assignable roles to the user
+* !role: Lists the available self-assignable roles to the user
+* !role (roleName): If the user does not have this role and it self-assignable, they are assigned the role. If they already have the role, it is removed from them.
+* !whitelist: Lists the available self-assignable roles to the user
 
 ### Misc Commands
 These commands are a good example of things that can be impletemented on top of this role management platform. Tailor these to your liking.
-	* !dota: Pings all users with the @dota role with a custom message
-	* !kalpa: Pings a special user and appends a random special message
-	* !git: Posts the github link to this bot
+* !dota: Pings all users with the @dota role with a custom message
+* !kalpa: Pings a special user and appends a random special message
+* !git: Posts the github link to this bot
