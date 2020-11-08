@@ -6,7 +6,10 @@ if you don't already have one, create a bot and run it (i.e. host it) using the 
 
 NOTE: This repository does not contain the required token for your bot within the .env file. You will have to update this file with the private
 token that you receive when you create the bot. It should look as follows:
+
 `DISCORD_TOKEN=(your token here)`
+
+This file will have the be renamed `.env` via the command line to work properly - it is held as envTemplate in the repo.
 
 Currently, there are some issues with a microsoft certificate and hosting bots on windows machines. The fix can be found [here](https://github.com/Rapptz/discord.py/issues/4159).
 
