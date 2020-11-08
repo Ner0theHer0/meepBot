@@ -23,6 +23,11 @@ class Roles(commands.Cog):
         whitelist = []
 
         whitelist = read_csv('whitelist.csv')
+        if whitelist is None:
+            response = (user.mention + ', there are no whitelisted roles in this server')
+            await ctx.send(response)
+            return
+        
         sRoles = ctx.guild.roles
         
         if (arg):
@@ -110,7 +115,10 @@ def read_csv(filename):
                 wlist = []
                 col = 0
                 for row in read:
-                    wlist.append(row[0])
+                    try:
+                        wlist.append(row[0])
+                    except:
+                        print("No roles are in the whitelist")
                 return wlist
             
 def setup(bot):
